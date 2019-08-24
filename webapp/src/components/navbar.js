@@ -5,10 +5,11 @@ import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import IconButton from '@material-ui/core/IconButton'
-import MenuIcon from '@material-ui/icons/Menu'
 
 const useStyles = makeStyles(theme => ({
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1
+  },
   root: {
     flexGrow: 1
   },
@@ -20,16 +21,13 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-function NavBar () {
+export default function NavBar () {
   const classes = useStyles()
 
   return (
     <div className={classes.root}>
-      <AppBar position='static'>
+      <AppBar className={classes.appBar} position='fixed'>
         <Toolbar>
-          <IconButton aria-label='menu' className={classes.menuButton} color='inherit' edge='start'>
-            <MenuIcon />
-          </IconButton>
           <Typography className={classes.title} variant='h6'>
             Mitchell Tenney - Homework
           </Typography>
@@ -38,5 +36,3 @@ function NavBar () {
     </div>
   )
 }
-
-export default NavBar
