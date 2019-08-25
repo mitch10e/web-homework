@@ -15,8 +15,8 @@ import TablePagination from '@material-ui/core/TablePagination'
 import { stableSort, getSorting } from './../../component-logic/table-sort'
 import { tableStyles } from './../../component-logic/table-styles'
 
-UsersTable.propTypes = {
-  users: PropTypes.arrayOf(PropTypes.shape({
+MerchantsTable.propTypes = {
+  merchants: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
@@ -25,9 +25,9 @@ UsersTable.propTypes = {
   })).isRequired
 }
 
-export default function UsersTable (props) {
+export default function MerchantsTable (props) {
   const classes = tableStyles()
-  const { users } = props
+  const { merchants } = props
 
   const [order, setOrder] = React.useState('asc')
   const [orderBy, setOrderBy] = React.useState('id')
@@ -45,7 +45,7 @@ export default function UsersTable (props) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = users.map(n => n.name)
+      const newSelecteds = merchants.map(n => n.name)
       setSelected(newSelecteds)
     } else {
       setSelected([])
@@ -81,7 +81,7 @@ export default function UsersTable (props) {
     setPage(0)
   }
 
-  const userHeaders = [
+  const merchantHeaders = [
     { id: 'id', numeric: false, disablePadding: false, label: 'ID' },
     { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
     { id: 'email', numeric: false, disablePadding: false, label: 'Email' },
@@ -92,35 +92,35 @@ export default function UsersTable (props) {
   return (
     <Paper className={classes.root}>
       <TableToolbar
-        dataType={'User'}
-        dataTypePlural={'Users'}
+        dataType={'Merchant'}
+        dataTypePlural={'Merchants'}
         numSelected={selected.length}
       />
       <Table className={classes.table}>
         <TableHeader
           classes={classes}
-          dataTypePlural={'Users'}
-          headers={userHeaders}
+          dataTypePlural={'Merchants'}
+          headers={merchantHeaders}
           numSelected={selected.length}
           onRequestSort={handleRequestSort}
           onSelectAllClick={handleSelectAllClick}
           order={order}
           orderBy={orderBy}
-          rowCount={users.length}
+          rowCount={merchants.length}
         />
         <TableBody>
-          {stableSort(users, getSorting(order, orderBy))
+          {stableSort(merchants, getSorting(order, orderBy))
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((user, index) => {
-              const isItemSelected = isSelected(user.name)
+            .map((merchant, index) => {
+              const isItemSelected = isSelected(merchant.name)
               const labelId = 'enhanced-table-checkbox-' + index
 
               return (
                 <TableRow
                   aria-checked={isItemSelected}
                   hover
-                  key={user.id}
-                  onClick={event => handleClick(event, user.name)}
+                  key={merchant.id}
+                  onClick={event => handleClick(event, merchant.name)}
                   role='checkbox'
                   selected={isItemSelected}
                   tabIndex={-1}
@@ -131,11 +131,11 @@ export default function UsersTable (props) {
                       inputProps={{ 'aria-labelledby': labelId }}
                     />
                   </TableCell>
-                  <TableCell component='th' scope='row'>{user.id}</TableCell>
-                  <TableCell>{user.name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.created}</TableCell>
-                  <TableCell>{user.updated}</TableCell>
+                  <TableCell component='th' scope='row'>{merchant.id}</TableCell>
+                  <TableCell>{merchant.name}</TableCell>
+                  <TableCell>{merchant.email}</TableCell>
+                  <TableCell>{merchant.created}</TableCell>
+                  <TableCell>{merchant.updated}</TableCell>
                 </TableRow>
               )
             })}
@@ -151,7 +151,7 @@ export default function UsersTable (props) {
           'aria-label': 'previous page'
         }}
         component='div'
-        count={users.length}
+        count={merchants.length}
         nextIconButtonProps={{
           'aria-label': 'next page'
         }}

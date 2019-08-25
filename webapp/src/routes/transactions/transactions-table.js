@@ -15,19 +15,20 @@ import TablePagination from '@material-ui/core/TablePagination'
 import { stableSort, getSorting } from './../../component-logic/table-sort'
 import { tableStyles } from './../../component-logic/table-styles'
 
-UsersTable.propTypes = {
-  users: PropTypes.arrayOf(PropTypes.shape({
+TransactionsTable.propTypes = {
+  transactions: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    created: PropTypes.string.isRequired,
-    updated: PropTypes.string
+    user: PropTypes.string.isRequired,
+    merchant: PropTypes.string.isRequired,
+    cost: PropTypes.number.isRequired,
+    tax: PropTypes.number.isRequired,
+    date: PropTypes.string.isRequired
   })).isRequired
 }
 
-export default function UsersTable (props) {
+export default function TransactionsTable (props) {
   const classes = tableStyles()
-  const { users } = props
+  const { transactions } = props
 
   const [order, setOrder] = React.useState('asc')
   const [orderBy, setOrderBy] = React.useState('id')
@@ -45,19 +46,19 @@ export default function UsersTable (props) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = users.map(n => n.name)
+      const newSelecteds = transactions.map(item => item.id)
       setSelected(newSelecteds)
     } else {
       setSelected([])
     }
   }
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name)
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id)
     let newSelected = []
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name)
+      newSelected = newSelected.concat(selected, id)
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1))
     } else if (selectedIndex === selected.length - 1) {
@@ -81,46 +82,48 @@ export default function UsersTable (props) {
     setPage(0)
   }
 
-  const userHeaders = [
+  const transactionHeaders = [
     { id: 'id', numeric: false, disablePadding: false, label: 'ID' },
-    { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
-    { id: 'email', numeric: false, disablePadding: false, label: 'Email' },
-    { id: 'created', numeric: false, disablePadding: false, label: 'Created' },
-    { id: 'updated', numeric: false, disablePadding: false, label: 'Updated' }
+    { id: 'user', numeric: false, disablePadding: false, label: 'User' },
+    { id: 'merchant', numeric: false, disablePadding: false, label: 'Merchant' },
+    { id: 'cost', numeric: true, disablePadding: false, label: 'Cost' },
+    { id: 'tax', numeric: true, disablePadding: false, label: 'Tax' },
+    { id: 'total', numeric: true, disablePadding: false, label: 'Total Cost' },
+    { id: 'date', numeric: false, disablePadding: false, label: 'Date' }
   ]
 
   return (
     <Paper className={classes.root}>
       <TableToolbar
-        dataType={'User'}
-        dataTypePlural={'Users'}
+        dataType={'Transaction'}
+        dataTypePlural={'Transactions'}
         numSelected={selected.length}
       />
       <Table className={classes.table}>
         <TableHeader
           classes={classes}
-          dataTypePlural={'Users'}
-          headers={userHeaders}
+          dataTypePlural={'Transactions'}
+          headers={transactionHeaders}
           numSelected={selected.length}
           onRequestSort={handleRequestSort}
           onSelectAllClick={handleSelectAllClick}
           order={order}
           orderBy={orderBy}
-          rowCount={users.length}
+          rowCount={transactions.length}
         />
         <TableBody>
-          {stableSort(users, getSorting(order, orderBy))
+          {stableSort(transactions, getSorting(order, orderBy))
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((user, index) => {
-              const isItemSelected = isSelected(user.name)
+            .map((transaction, index) => {
+              const isItemSelected = isSelected(transaction.id)
               const labelId = 'enhanced-table-checkbox-' + index
 
               return (
                 <TableRow
                   aria-checked={isItemSelected}
                   hover
-                  key={user.id}
-                  onClick={event => handleClick(event, user.name)}
+                  key={transaction.id}
+                  onClick={event => handleClick(event, transaction.id)}
                   role='checkbox'
                   selected={isItemSelected}
                   tabIndex={-1}
@@ -131,11 +134,13 @@ export default function UsersTable (props) {
                       inputProps={{ 'aria-labelledby': labelId }}
                     />
                   </TableCell>
-                  <TableCell component='th' scope='row'>{user.id}</TableCell>
-                  <TableCell>{user.name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.created}</TableCell>
-                  <TableCell>{user.updated}</TableCell>
+                  <TableCell component='th' scope='row'>{transaction.id}</TableCell>
+                  <TableCell>{transaction.user}</TableCell>
+                  <TableCell>{transaction.merchant}</TableCell>
+                  <TableCell align='right'>${transaction.cost.toFixed(2)}</TableCell>
+                  <TableCell align='right'>${transaction.tax.toFixed(2)}</TableCell>
+                  <TableCell align='right'>${(transaction.cost + transaction.tax).toFixed(2)}</TableCell>
+                  <TableCell>{transaction.date}</TableCell>
                 </TableRow>
               )
             })}
@@ -151,7 +156,7 @@ export default function UsersTable (props) {
           'aria-label': 'previous page'
         }}
         component='div'
-        count={users.length}
+        count={transactions.length}
         nextIconButtonProps={{
           'aria-label': 'next page'
         }}

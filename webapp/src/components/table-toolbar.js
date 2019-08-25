@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function TableToolbar (props) {
   const classes = useStyles()
-  const { numSelected, dataType } = props
+  const { numSelected, dataType, dataTypePlural } = props
 
   return (
     <Toolbar className={clsx(classes.root, {
@@ -52,7 +52,7 @@ export default function TableToolbar (props) {
         {numSelected > 0 ? (
           <Typography color='inherit' variant='subtitle1'>{numSelected} selected</Typography>
         ) : (
-          <Typography id='tableTitle' variant='h6'>Users</Typography>
+          <Typography id='tableTitle' variant='h6'>{dataTypePlural}</Typography>
         )}
       </div>
       <div className={classes.spacer} />
@@ -77,5 +77,6 @@ export default function TableToolbar (props) {
 
 TableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
-  dataType: PropTypes.string.isRequired
+  dataType: PropTypes.string.isRequired,
+  dataTypePlural: PropTypes.string.isRequired
 }
