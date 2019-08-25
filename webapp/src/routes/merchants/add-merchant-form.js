@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 // Material UI
 import TextField from '@material-ui/core/TextField'
@@ -23,8 +24,10 @@ const formStyles = makeStyles(theme => ({
   }
 }))
 
-export default function AddMerchantForm () {
+export default function AddMerchantForm (props) {
   const classes = formStyles()
+  const { handleCloseAdd } = props
+
   const [values, setValues] = React.useState({
     name: '',
     email: ''
@@ -32,6 +35,14 @@ export default function AddMerchantForm () {
 
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value })
+  }
+
+  const handleClickAdd = () => {
+    handleCloseAdd()
+  }
+
+  const handleCancel = () => {
+    handleCloseAdd()
   }
 
   return (
@@ -56,9 +67,13 @@ export default function AddMerchantForm () {
         variant='outlined'
       />
       <div className={classes.actions}>
-        <Button className={classes.button} color='primary' variant='contained'>Add Merchant</Button>
-        <Button className={classes.button} color='secondary'>Cancel</Button>
+        <Button className={classes.button} color='primary' onClick={handleClickAdd} variant='contained'>Add Merchant</Button>
+        <Button className={classes.button} color='secondary' onClick={handleCancel}>Cancel</Button>
       </div>
     </form>
   )
+}
+
+AddMerchantForm.propTypes = {
+  handleCloseAdd: PropTypes.func.isRequired
 }

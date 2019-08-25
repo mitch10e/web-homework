@@ -52,7 +52,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function TableToolbar (props) {
   const classes = useStyles()
-  const { numSelected, dataType, dataTypePlural } = props
+  const { numSelected, dataType, dataTypePlural, users, merchants } = props
   const [openAdd, setOpenAdd] = React.useState(false)
 
   function handleClickOpenAdd () {
@@ -101,9 +101,9 @@ export default function TableToolbar (props) {
       >
         <DialogTitle id='form-dialog-add-title'>Add New {dataType}</DialogTitle>
         <DialogContent>
-          {dataType === 'User' ? <AddUserForm /> : null}
-          {dataType === 'Merchant' ? <AddMerchantForm /> : null}
-          {dataType === 'Transaction' ? <AddTransactionFrom /> : null}
+          {dataType === 'User' ? <AddUserForm handleCloseAdd={handleCloseAdd} /> : null}
+          {dataType === 'Merchant' ? <AddMerchantForm handleCloseAdd={handleCloseAdd} /> : null}
+          {dataType === 'Transaction' ? <AddTransactionFrom handleCloseAdd={handleCloseAdd} merchants={merchants} users={users} /> : null}
         </DialogContent>
       </Dialog>
     </Toolbar>
@@ -113,5 +113,7 @@ export default function TableToolbar (props) {
 TableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
   dataType: PropTypes.oneOf(['User', 'Merchant', 'Transaction']).isRequired,
-  dataTypePlural: PropTypes.string.isRequired
+  dataTypePlural: PropTypes.string.isRequired,
+  users: PropTypes.arrayOf(PropTypes.object.isRequired),
+  merchants: PropTypes.arrayOf(PropTypes.object.isRequired)
 }

@@ -31,17 +31,24 @@ const formStyles = makeStyles(theme => ({
 
 export default function AddTransactionForm (props) {
   const classes = formStyles()
-  const { users, merchants } = props
+  const { users, merchants, handleCloseAdd } = props
   const [values, setValues] = React.useState({
     user: '',
     merchant: '',
     cost: '',
-    tax: '',
-    date: ''
+    tax: ''
   })
 
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value })
+  }
+
+  const handleClickAdd = () => {
+    handleCloseAdd()
+  }
+
+  const handleCancel = () => {
+    handleCloseAdd()
   }
 
   return (
@@ -118,8 +125,8 @@ export default function AddTransactionForm (props) {
         variant='outlined'
       />
       <div className={classes.actions}>
-        <Button className={classes.button} color='primary' variant='contained'>Add Transaction</Button>
-        <Button className={classes.button} color='secondary'>Cancel</Button>
+        <Button className={classes.button} color='primary' onClick={handleClickAdd} variant='contained'>Add Transaction</Button>
+        <Button className={classes.button} color='secondary' onClick={handleCancel}>Cancel</Button>
       </div>
     </form>
   )
@@ -127,10 +134,6 @@ export default function AddTransactionForm (props) {
 
 AddTransactionForm.propTypes = {
   users: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
-  merchants: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired
-}
-
-AddTransactionForm.defaultProps = {
-  users: [{ id: -1, name: 'Please create a user' }],
-  merchants: [{ id: -1, name: 'Please create a merchant' }]
+  merchants: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  handleCloseAdd: PropTypes.func.isRequired
 }
