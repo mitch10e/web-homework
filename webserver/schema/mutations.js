@@ -1,7 +1,14 @@
 const graphql = require('graphql')
 const { GraphQLObjectType, GraphQLString, GraphQLBoolean, GraphQLFloat } = graphql
+
+const { MerchantModel } = require('./../data-models/Merchant')
+const MerchantType = require('./merchant-type')
+const Merchants = require('./../query-resolvers/merchant-resolvers')
+
 const { TransactionModel } = require('../data-models/Transaction')
 const TransactionType = require('./transaction-type')
+const Transactions = require('./../query-resolvers/transaction-resolvers')
+
 const { UserModel } = require('./../data-models/User')
 const UserType = require('./user-type')
 const Users = require('./../query-resolvers/user-resolvers')
@@ -9,6 +16,40 @@ const Users = require('./../query-resolvers/user-resolvers')
 const mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
+    //Merchants
+    addMerchant: {
+      type: MerchantType,
+      args: {
+        name: { type: GraphQLString },
+        email: { type: GraphQLString }
+      },
+      resolve (parentValue, { name, email }) {
+        return (new MerchantModel({ name, email })).save()
+      }
+    },
+    deleteMerchant: {
+      type: MerchantType,
+      args: {
+        id: { type: GraphQLString }
+      },
+      resolve (parentValue, { id }) {
+        return Merchants.deleteById(id)
+      }
+    },
+    updateMerchant: {
+      type: MerchantType,
+      args: {
+        id: { type: GraphQLString },
+        name: { type: GraphQLString },
+        email: { type: GraphQLString }
+      },
+      resolve (parentValue, { id, name, email }) {
+        return Merchants.updateById(id, name, email).update()
+      }
+    },
+
+    // Transactions
+
     addTransaction: {
       type: TransactionType,
       args: {
@@ -25,6 +66,34 @@ const mutation = new GraphQLObjectType({
         return (new TransactionModel({ user_id, merchant_id, cost, tax, debit, credit, description })).save()
       }
     },
+    deleteTransaction: {
+      type: TransactionType,
+      args: {
+        id: { type: GraphQLString }
+      },
+      resolve (parentValue, { id }) {
+        return Transactions.deleteById(id)
+      }
+    },
+    updateTransaction: {
+      type: TransactionType,
+      args: {
+        id: { type: GraphQLString },
+        user_id: { type: GraphQLString },
+        merchant_id: { type: GraphQLString },
+        cost: { type: GraphQLFloat },
+        tax: { type: GraphQLFloat },
+        debit: { type: GraphQLBoolean },
+        credit: { type: GraphQLBoolean },
+        description: { type: GraphQLString }
+      },
+      resolve (parentValue, {id, user_id, merchant_id, cost, tax, debit, credit, description }) {
+        return Transactions.updateById(id, user_id, merchant_id, cost, tax, debit, credit, description).update()
+      }
+    },
+
+    // Users
+
     addUser: {
       type: UserType,
       args: {
@@ -35,6 +104,15 @@ const mutation = new GraphQLObjectType({
         return (new UserModel({ name, email })).save()
       }
     },
+    deleteUser: {
+      type: UserType,
+      args: {
+        id: { type: GraphQLString }
+      },
+      resolve (parentValue, { id }) {
+        return Users.deleteById(id)
+      }
+    },
     updateUser: {
       type: UserType,
       args: {
@@ -43,7 +121,7 @@ const mutation = new GraphQLObjectType({
         email: { type: GraphQLString }
       },
       resolve (parentValue, { id, name, email }) {
-        return Users.udpateById(id, name, email).save()
+        return Users.updateById(id, name, email).update()
       }
     }
   })

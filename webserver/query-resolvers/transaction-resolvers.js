@@ -18,7 +18,7 @@ async function findOne(id) {
   return packageModel(transaction)[0] || null
 }
 
-async function udpateById (id, user_id, merchant_id, cost, tax, debit, credit, description) {
+async function updateById (id, user_id, merchant_id, cost, tax, debit, credit, description) {
   const query = TransactionModel.findByIdAndUpdate(id,
     {
       user_id: user_id,
@@ -47,6 +47,6 @@ async function deleteById (id) {
 module.exports = {
   find,
   findOne,
-  udpateById,
+  updateById,
   deleteById
 }

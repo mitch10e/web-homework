@@ -19,7 +19,7 @@ async function findOne (id) {
 }
 
 
-async function udpateById (id, name, email) {
+async function updateById (id, name, email) {
   const query = MerchantModel.findByIdAndUpdate(id,
     {
       name: name,
@@ -43,6 +43,6 @@ async function deleteById (id) {
 module.exports = {
   find,
   findOne,
-  udpateById,
+  updateById,
   deleteById
 }
