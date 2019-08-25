@@ -127,7 +127,6 @@ export default function TransactionsTable (props) {
                   aria-checked={isItemSelected}
                   hover
                   key={transaction.id}
-                  onClick={event => handleClick(event, transaction.id)}
                   role='checkbox'
                   selected={isItemSelected}
                   tabIndex={-1}
@@ -136,6 +135,7 @@ export default function TransactionsTable (props) {
                     <Checkbox
                       checked={isItemSelected}
                       inputProps={{ 'aria-labelledby': labelId }}
+                      onClick={event => handleClick(event, transaction.id)}
                     />
                   </TableCell>
                   <TableCell component='th' scope='row'>{transaction.id}</TableCell>

@@ -120,7 +120,6 @@ export default function MerchantsTable (props) {
                   aria-checked={isItemSelected}
                   hover
                   key={merchant.id}
-                  onClick={event => handleClick(event, merchant.id)}
                   role='checkbox'
                   selected={isItemSelected}
                   tabIndex={-1}
@@ -129,6 +128,7 @@ export default function MerchantsTable (props) {
                     <Checkbox
                       checked={isItemSelected}
                       inputProps={{ 'aria-labelledby': labelId }}
+                      onClick={event => handleClick(event, merchant.id)}
                     />
                   </TableCell>
                   <TableCell component='th' scope='row'>{merchant.id}</TableCell>

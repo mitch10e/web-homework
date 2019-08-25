@@ -15,6 +15,12 @@ import TablePagination from '@material-ui/core/TablePagination'
 import { stableSort, getSorting } from './../../component-logic/table-sort'
 import { tableStyles } from './../../component-logic/table-styles'
 
+// Material UI - Dialog
+import Dialog from '@material-ui/core/Dialog'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import DialogContent from '@material-ui/core/DialogContent'
+import EditUserForm from './edit-user-form'
+
 UsersTable.propTypes = {
   users: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
@@ -29,6 +35,16 @@ export default function UsersTable (props) {
   const classes = tableStyles()
   const { users } = props
 
+  const defaultEditUser = {
+    id: -1,
+    name: '',
+    email: ''
+  }
+  // Editing
+  const [openEdit, setOpenEdit] = React.useState(false)
+  const [editUser, setEditUser] = React.useState(defaultEditUser)
+
+  // Sorting
   const [order, setOrder] = React.useState('asc')
   const [orderBy, setOrderBy] = React.useState('id')
   const [selected, setSelected] = React.useState([])
@@ -53,6 +69,12 @@ export default function UsersTable (props) {
   }
 
   const handleClick = (event, id) => {
+    if (!event.target.tagName === 'INPUT') {
+      return
+    } else {
+      event.stopPropagation()
+    }
+
     const selectedIndex = selected.indexOf(id)
     let newSelected = []
 
@@ -79,6 +101,18 @@ export default function UsersTable (props) {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value)
     setPage(0)
+  }
+
+  const handleClickToEdit = (event, id) => {
+    let selectedUser = users.find(user => user.id === id)
+    if (selectedUser) {
+      setEditUser(selectedUser)
+      setOpenEdit(true)
+    }
+  }
+
+  const handleCloseEdit = () => {
+    setOpenEdit(false)
   }
 
   const userHeaders = [
@@ -120,7 +154,7 @@ export default function UsersTable (props) {
                   aria-checked={isItemSelected}
                   hover
                   key={user.id}
-                  onClick={event => handleClick(event, user.id)}
+                  onClick={event => handleClickToEdit(event, user.id)}
                   role='checkbox'
                   selected={isItemSelected}
                   tabIndex={-1}
@@ -129,6 +163,7 @@ export default function UsersTable (props) {
                     <Checkbox
                       checked={isItemSelected}
                       inputProps={{ 'aria-labelledby': labelId }}
+                      onClick={event => handleClick(event, user.id)}
                     />
                   </TableCell>
                   <TableCell component='th' scope='row'>{user.id}</TableCell>
@@ -161,6 +196,17 @@ export default function UsersTable (props) {
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 15, 20, 25]}
       />
+      <Dialog
+        aria-labelledby='form-dialog-edit-title'
+        fullWidth
+        onClose={handleCloseEdit}
+        open={openEdit}
+      >
+        <DialogTitle id='form-dialog-edit-title'>Edit User (id: {editUser.id})</DialogTitle>
+        <DialogContent>
+          <EditUserForm handleCloseEdit={handleCloseEdit} user={editUser} />
+        </DialogContent>
+      </Dialog>
     </Paper>
   )
 }
