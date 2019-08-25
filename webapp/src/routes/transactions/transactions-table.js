@@ -37,7 +37,7 @@ export default function TransactionsTable (props) {
   const [selected, setSelected] = React.useState([])
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
-  const isSelected = name => selected.indexOf(name) !== -1
+  const isSelected = id => selected.indexOf(id) !== -1
   const emptyRows = items => rowsPerPage - Math.min(rowsPerPage, items.length - page * rowsPerPage)
 
   const handleRequestSort = (event, property) => {
@@ -48,7 +48,7 @@ export default function TransactionsTable (props) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = transactions.map(item => item.id)
+      const newSelecteds = transactions.map(transaction => transaction.id)
       setSelected(newSelecteds)
     } else {
       setSelected([])
