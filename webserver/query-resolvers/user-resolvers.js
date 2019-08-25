@@ -29,11 +29,19 @@ async function udpateById (id, name, email) {
     })
   var user = await query.exec()
 
-  return packageModel(user)[0] || null
+  return packageModel(user)
+}
+
+async function deleteById (id) {
+  const query = UserModel.findByIdAndDelete(id)
+  var user = await query.exec()
+
+  return packageModel(user)
 }
 
 module.exports = {
   find,
   findOne,
-  udpateById
+  udpateById,
+  deleteById
 }
