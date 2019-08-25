@@ -8,11 +8,14 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
+import Button from '@material-ui/core/Button'
 
 // Material UI - Dialog
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogActions from '@material-ui/core/DialogActions'
 
 // Forms
 import AddUserForm from './../routes/users/add-user-form'
@@ -45,6 +48,13 @@ const useStyles = makeStyles(theme => ({
   actions: {
     color: theme.palette.text.secondary
   },
+  dialogActions: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2)
+  },
+  dialogButton: {
+    marginRight: theme.spacing(2)
+  },
   title: {
     flex: '0 0 auto'
   }
@@ -54,6 +64,7 @@ export default function TableToolbar (props) {
   const classes = useStyles()
   const { numSelected, dataType, dataTypePlural, users, merchants } = props
   const [openAdd, setOpenAdd] = React.useState(false)
+  const [openDelete, setOpenDelete] = React.useState(false)
 
   function handleClickOpenAdd () {
     setOpenAdd(true)
@@ -61,6 +72,14 @@ export default function TableToolbar (props) {
 
   function handleCloseAdd () {
     setOpenAdd(false)
+  }
+
+  function handleClickOpenDelete () {
+    setOpenDelete(true)
+  }
+
+  function handleCloseDelete () {
+    setOpenDelete(false)
   }
 
   return (
@@ -78,7 +97,10 @@ export default function TableToolbar (props) {
       <div className={classes.actions}>
         {numSelected > 0 ? (
           <Tooltip title='Delete'>
-            <IconButton aria-label='delete'>
+            <IconButton
+              aria-label='delete'
+              onClick={handleClickOpenDelete}
+            >
               <DeleteIcon />
             </IconButton>
           </Tooltip>
@@ -105,6 +127,23 @@ export default function TableToolbar (props) {
           {dataType === 'Merchant' ? <AddMerchantForm handleCloseAdd={handleCloseAdd} /> : null}
           {dataType === 'Transaction' ? <AddTransactionFrom handleCloseAdd={handleCloseAdd} merchants={merchants} users={users} /> : null}
         </DialogContent>
+      </Dialog>
+      <Dialog
+        aria-labelledby='form-dialog-delete-title'
+        fullWidth
+        onClose={handleCloseDelete}
+        open={openDelete}
+      >
+        <DialogTitle id='form-dialog-delete-title'>Delete the selected {numSelected > 1 ? dataTypePlural : dataType}?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Hitting delete will proceed to delete the selected {numSelected > 1 ? dataTypePlural : dataType}. Please note that this action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions className={classes.dialogActions}>
+          <Button className={classes.dialogButton} color='primary' onClick={handleCloseDelete}>Cancel</Button>
+          <Button className={classes.dialogButton} color='secondary' onClick={handleCloseDelete} variant='contained'>Delete</Button>
+        </DialogActions>
       </Dialog>
     </Toolbar>
   )
