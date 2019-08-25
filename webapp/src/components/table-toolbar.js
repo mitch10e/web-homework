@@ -14,6 +14,11 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 
+// Forms
+import AddUserForm from './../routes/users/add-user-form'
+import AddMerchantForm from './../routes/merchants/add-merchant-form'
+import AddTransactionFrom from './../routes/transactions/add-transaction-form'
+
 // Material Icons
 import AddIcon from '@material-ui/icons/Add'
 import DeleteIcon from '@material-ui/icons/Delete'
@@ -90,14 +95,15 @@ export default function TableToolbar (props) {
       </div>
       <Dialog
         aria-labelledby='form-dialog-add-title'
+        fullWidth
         onClose={handleCloseAdd}
         open={openAdd}
       >
         <DialogTitle id='form-dialog-add-title'>Add New {dataType}</DialogTitle>
         <DialogContent>
-          {dataType === 'User' ? (<div>User!</div>) : null}
-          {dataType === 'Merchant' ? (<div>Merchant!</div>) : null}
-          {dataType === 'Transaction' ? (<div>Transaction!</div>) : null}
+          {dataType === 'User' ? <AddUserForm /> : null}
+          {dataType === 'Merchant' ? <AddMerchantForm /> : null}
+          {dataType === 'Transaction' ? <AddTransactionFrom /> : null}
         </DialogContent>
       </Dialog>
     </Toolbar>
@@ -106,6 +112,6 @@ export default function TableToolbar (props) {
 
 TableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
-  dataType: PropTypes.string.isRequired,
+  dataType: PropTypes.oneOf(['User', 'Merchant', 'Transaction']).isRequired,
   dataTypePlural: PropTypes.string.isRequired
 }
