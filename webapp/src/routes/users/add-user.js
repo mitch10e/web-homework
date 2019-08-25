@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 
 // Material UI
 
-export function AddUser () {
+export function AddUserModal () {
   return (
     <Fragment>
       <div>Add User</div>

@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 // Fragments / Components
 import { Home } from './routes/home'
 import { Transactions } from './routes/transactions'
-import { Users, AddUser } from './routes/users'
+import { Users } from './routes/users'
 import { Merchants } from './routes/merchants'
 import { Charts } from './routes/charts'
 import { Settings } from './routes/settings'
@@ -36,7 +36,6 @@ function AppRouter () {
         <Route component={Home} exact path='/' />
         <Route component={Transactions} exact path='/transactions' />
         <Route component={Users} exact path='/users' />
-        <Route component={AddUser} exact path='/users/add' />
         <Route component={Merchants} exact path='/merchants' />
         <Route component={Charts} exact path='/charts' />
         <Route component={Settings} exact path='/settings' />
