@@ -45,19 +45,19 @@ export default function MerchantsTable (props) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = merchants.map(n => n.name)
+      const newSelecteds = merchants.map(merchant => merchant.id)
       setSelected(newSelecteds)
     } else {
       setSelected([])
     }
   }
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name)
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id)
     let newSelected = []
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name)
+      newSelected = newSelected.concat(selected, id)
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1))
     } else if (selectedIndex === selected.length - 1) {
@@ -94,7 +94,7 @@ export default function MerchantsTable (props) {
       <TableToolbar
         dataType={'Merchant'}
         dataTypePlural={'Merchants'}
-        numSelected={selected.length}
+        selected={selected}
       />
       <Table className={classes.table}>
         <TableHeader
@@ -112,7 +112,7 @@ export default function MerchantsTable (props) {
           {stableSort(merchants, getSorting(order, orderBy))
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((merchant, index) => {
-              const isItemSelected = isSelected(merchant.name)
+              const isItemSelected = isSelected(merchant.id)
               const labelId = 'enhanced-table-checkbox-' + index
 
               return (
@@ -120,7 +120,7 @@ export default function MerchantsTable (props) {
                   aria-checked={isItemSelected}
                   hover
                   key={merchant.id}
-                  onClick={event => handleClick(event, merchant.name)}
+                  onClick={event => handleClick(event, merchant.id)}
                   role='checkbox'
                   selected={isItemSelected}
                   tabIndex={-1}

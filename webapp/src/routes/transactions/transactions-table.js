@@ -23,12 +23,14 @@ TransactionsTable.propTypes = {
     cost: PropTypes.number.isRequired,
     tax: PropTypes.number.isRequired,
     date: PropTypes.string.isRequired
-  })).isRequired
+  })).isRequired,
+  users: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  merchants: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired
 }
 
 export default function TransactionsTable (props) {
   const classes = tableStyles()
-  const { transactions } = props
+  const { transactions, users, merchants } = props
 
   const [order, setOrder] = React.useState('asc')
   const [orderBy, setOrderBy] = React.useState('id')
@@ -97,7 +99,9 @@ export default function TransactionsTable (props) {
       <TableToolbar
         dataType={'Transaction'}
         dataTypePlural={'Transactions'}
-        numSelected={selected.length}
+        merchants={merchants}
+        selected={selected}
+        users={users}
       />
       <Table className={classes.table}>
         <TableHeader

@@ -45,19 +45,19 @@ export default function UsersTable (props) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = users.map(n => n.name)
+      const newSelecteds = users.map(user => user.id)
       setSelected(newSelecteds)
     } else {
       setSelected([])
     }
   }
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name)
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id)
     let newSelected = []
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name)
+      newSelected = newSelected.concat(selected, id)
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1))
     } else if (selectedIndex === selected.length - 1) {
@@ -94,7 +94,7 @@ export default function UsersTable (props) {
       <TableToolbar
         dataType={'User'}
         dataTypePlural={'Users'}
-        numSelected={selected.length}
+        selected={selected}
       />
       <Table className={classes.table}>
         <TableHeader
@@ -112,7 +112,7 @@ export default function UsersTable (props) {
           {stableSort(users, getSorting(order, orderBy))
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((user, index) => {
-              const isItemSelected = isSelected(user.name)
+              const isItemSelected = isSelected(user.id)
               const labelId = 'enhanced-table-checkbox-' + index
 
               return (
@@ -120,7 +120,7 @@ export default function UsersTable (props) {
                   aria-checked={isItemSelected}
                   hover
                   key={user.id}
-                  onClick={event => handleClick(event, user.name)}
+                  onClick={event => handleClick(event, user.id)}
                   role='checkbox'
                   selected={isItemSelected}
                   tabIndex={-1}

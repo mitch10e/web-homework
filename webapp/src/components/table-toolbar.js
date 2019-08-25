@@ -62,7 +62,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function TableToolbar (props) {
   const classes = useStyles()
-  const { numSelected, dataType, dataTypePlural, users, merchants } = props
+  const { selected, dataType, dataTypePlural, users, merchants } = props
   const [openAdd, setOpenAdd] = React.useState(false)
   const [openDelete, setOpenDelete] = React.useState(false)
 
@@ -82,20 +82,24 @@ export default function TableToolbar (props) {
     setOpenDelete(false)
   }
 
+  function handleDeleteItems () {
+    handleCloseDelete()
+  }
+
   return (
     <Toolbar className={clsx(classes.root, {
-      [classes.highlight]: numSelected > 0
+      [classes.highlight]: selected.length > 0
     })}>
       <div className={classes.title}>
-        {numSelected > 0 ? (
-          <Typography color='inherit' variant='subtitle1'>{numSelected} selected</Typography>
+        {selected.length > 0 ? (
+          <Typography color='inherit' variant='subtitle1'>{selected.length} selected</Typography>
         ) : (
           <Typography id='tableTitle' variant='h6'>{dataTypePlural}</Typography>
         )}
       </div>
       <div className={classes.spacer} />
       <div className={classes.actions}>
-        {numSelected > 0 ? (
+        {selected.length > 0 ? (
           <Tooltip title='Delete'>
             <IconButton
               aria-label='delete'
@@ -134,15 +138,15 @@ export default function TableToolbar (props) {
         onClose={handleCloseDelete}
         open={openDelete}
       >
-        <DialogTitle id='form-dialog-delete-title'>Delete the selected {numSelected > 1 ? dataTypePlural : dataType}?</DialogTitle>
+        <DialogTitle id='form-dialog-delete-title'>Delete the selected {selected.length > 1 ? dataTypePlural : dataType}?</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Hitting delete will proceed to delete the selected {numSelected > 1 ? dataTypePlural : dataType}. Please note that this action cannot be undone.
+            Hitting delete will proceed to delete the selected {selected.length > 1 ? dataTypePlural : dataType}. Please note that this action cannot be undone.
           </DialogContentText>
         </DialogContent>
         <DialogActions className={classes.dialogActions}>
           <Button className={classes.dialogButton} color='primary' onClick={handleCloseDelete}>Cancel</Button>
-          <Button className={classes.dialogButton} color='secondary' onClick={handleCloseDelete} variant='contained'>Delete</Button>
+          <Button className={classes.dialogButton} color='secondary' onClick={handleDeleteItems} variant='contained'>Delete</Button>
         </DialogActions>
       </Dialog>
     </Toolbar>
@@ -150,7 +154,7 @@ export default function TableToolbar (props) {
 }
 
 TableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
+  selected: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   dataType: PropTypes.oneOf(['User', 'Merchant', 'Transaction']).isRequired,
   dataTypePlural: PropTypes.string.isRequired,
   users: PropTypes.arrayOf(PropTypes.object.isRequired),
