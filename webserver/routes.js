@@ -6,8 +6,10 @@ const path = require('path')
 module.exports = function (app, opts) {
   // Setup routes, middleware, and handlers
   app.get('/', (req, res) => {
-    res.locals.name = 'Divvy React Challenge'
-    res.render('index')
+    const data = require('./views/welcome.json')
+
+    res.header("Content-Type",'application/json')
+    res.send(JSON.stringify(data))
   })
 
   // GraphQL routes
@@ -19,6 +21,8 @@ module.exports = function (app, opts) {
       pretty: true
     })
   )
+
+  // API routes
 
   app.use(/(?!\/graphql)/, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'))

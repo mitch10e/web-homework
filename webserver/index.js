@@ -65,7 +65,7 @@ module.exports = function main(options, cb) {
   // Template engine
   app.engine('html', ejs.renderFile)
   app.set('views', path.join(__dirname, 'public'))
-  app.set('view engine', 'html')
+  app.set('view engine', 'pug')
 
   // Common middleware
   // app.use(/* ... */)

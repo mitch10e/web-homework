@@ -10,8 +10,8 @@ const {
 const { TransactionModel: Transaction } = require(path.join('..', 'data-models', 'Transaction'))
 const TransactionType = require('./transaction-type')
 
-const UserType = new GraphQLObjectType({
-  name: 'User',
+const MerchantType = new GraphQLObjectType({
+  name: 'Merchant',
   fields: () => ({
     id: { type: GraphQLString },
     name: { type: GraphQLString },
@@ -19,10 +19,10 @@ const UserType = new GraphQLObjectType({
     transactions: {
       type: new GraphQLList(TransactionType),
       resolve (parentValue, args) {
-        return Transaction.find({ user_id: args.id }).populate('transaction')
+        return Transaction.find({ merchant_id: args.id }).populate('transaction')
       }
     }
   })
 })
 
-module.exports = UserType
+module.exports = MerchantType
