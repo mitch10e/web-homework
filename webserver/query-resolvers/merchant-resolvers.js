@@ -18,26 +18,29 @@ async function findOne (id) {
   return packageModel(merchant)[0] || null
 }
 
+async function updateById (args) {
+  const id = args['id']
+  if (!id) {
+    return null
+  } else {
+    delete args.id
+  }
 
-async function updateById (id, name, email) {
-  const query = MerchantModel.findByIdAndUpdate(id,
+  const query = MerchantModel.findByIdAndUpdate(id, args,
     {
-      name: name,
-      email: email
-    }, {
       new: true,
       upsert: true
     })
   var merchant = await query.exec()
 
-  return packageModel(merchant)
+  return packageModel(merchant)[0] || null
 }
 
 async function deleteById (id) {
   const query = MerchantModel.findByIdAndDelete(id)
   var merchant = await query.exec()
 
-  return packageModel(merchant)
+  return packageModel(merchant)[0] || null
 }
 
 module.exports = {

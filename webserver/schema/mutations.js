@@ -44,7 +44,7 @@ const mutation = new GraphQLObjectType({
         email: { type: GraphQLString }
       },
       resolve (parentValue, { id, name, email }) {
-        return Merchants.updateById(id, name, email).update()
+        return Merchants.updateById(id, name, email)
       }
     },
 
@@ -88,7 +88,7 @@ const mutation = new GraphQLObjectType({
         description: { type: GraphQLString }
       },
       resolve (parentValue, {id, user_id, merchant_id, cost, tax, debit, credit, description }) {
-        return Transactions.updateById(id, user_id, merchant_id, cost, tax, debit, credit, description).update()
+        return Transactions.updateById(id, user_id, merchant_id, cost, tax, debit, credit, description)
       }
     },
 
@@ -120,8 +120,8 @@ const mutation = new GraphQLObjectType({
         name: { type: GraphQLString },
         email: { type: GraphQLString }
       },
-      resolve (parentValue, { id, name, email }) {
-        return Users.updateById(id, name, email).update()
+      resolve (parentValue, args) {
+        return Users.updateById(args)
       }
     }
   })

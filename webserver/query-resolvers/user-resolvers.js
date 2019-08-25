@@ -18,25 +18,28 @@ async function findOne (id) {
   return packageModel(user)[0] || null
 }
 
-async function updateById (id, name, email) {
-  const query = UserModel.findByIdAndUpdate(id,
-    {
-      name: name,
-      email: email
-    }, {
+async function updateById (args) {
+  const id = args['id']
+  if (!id) {
+    return null
+  } else {
+    delete args.id
+  }
+
+  const query = UserModel.findByIdAndUpdate(id, args, {
       new: true,
       upsert: true
     })
   var user = await query.exec()
 
-  return packageModel(user)
+  return packageModel(user)[0] || null
 }
 
 async function deleteById (id) {
   const query = UserModel.findByIdAndDelete(id)
   var user = await query.exec()
 
-  return packageModel(user)
+  return packageModel(user)[0] || null
 }
 
 module.exports = {
