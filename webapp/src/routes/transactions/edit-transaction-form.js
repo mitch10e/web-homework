@@ -8,26 +8,30 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import MenuItem from '@material-ui/core/MenuItem'
 import { formStyles } from './../../component-logic/form-styles'
 
-export default function AddTransactionForm (props) {
+export default function EditTransactionForm (props) {
   const classes = formStyles()
-  const { users, merchants, handleCloseAdd } = props
+  const { transaction, users, merchants, handleCloseEdit } = props
+  const currentUser = users.find(user => user.id === transaction.user)
+  const currentMerchant = merchants.find(merchant => merchant.id === transaction.merchant)
+
   const [values, setValues] = React.useState({
-    user: '',
-    merchant: '',
-    cost: '',
-    tax: ''
+    id: transaction.id,
+    user: currentUser.name,
+    merchant: currentMerchant.name,
+    cost: transaction.cost,
+    tax: transaction.tax
   })
 
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value })
   }
 
-  const handleClickAdd = () => {
-    handleCloseAdd()
+  const handleClickEdit = () => {
+    handleCloseEdit()
   }
 
   const handleCancel = () => {
-    handleCloseAdd()
+    handleCloseEdit()
   }
 
   return (
@@ -104,14 +108,14 @@ export default function AddTransactionForm (props) {
         variant='outlined'
       />
       <div className={classes.actions}>
-        <Button className={classes.button} color='primary' onClick={handleClickAdd} variant='contained'>Add Transaction</Button>
+        <Button className={classes.button} color='primary' onClick={handleClickEdit} variant='contained'>Update Transaction</Button>
         <Button className={classes.button} color='secondary' onClick={handleCancel}>Cancel</Button>
       </div>
     </form>
   )
 }
 
-AddTransactionForm.propTypes = {
+EditTransactionForm.propTypes = {
   users: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired
@@ -120,5 +124,12 @@ AddTransactionForm.propTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired
   }).isRequired).isRequired,
-  handleCloseAdd: PropTypes.func.isRequired
+  transaction: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    user: PropTypes.number.isRequired,
+    merchant: PropTypes.number.isRequired,
+    cost: PropTypes.number.isRequired,
+    tax: PropTypes.number.isRequired
+  }).isRequired,
+  handleCloseEdit: PropTypes.func.isRequired
 }

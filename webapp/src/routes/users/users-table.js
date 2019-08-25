@@ -35,12 +35,12 @@ export default function UsersTable (props) {
   const classes = tableStyles()
   const { users } = props
 
+  // Editing
   const defaultEditUser = {
     id: -1,
     name: '',
     email: ''
   }
-  // Editing
   const [openEdit, setOpenEdit] = React.useState(false)
   const [editUser, setEditUser] = React.useState(defaultEditUser)
 
