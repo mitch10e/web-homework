@@ -8,19 +8,18 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
-import Button from '@material-ui/core/Button'
 
 // Material UI - Dialog
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText'
-import DialogActions from '@material-ui/core/DialogActions'
 
 // Forms
 import AddUserForm from './../routes/users/add-user-form'
 import AddMerchantForm from './../routes/merchants/add-merchant-form'
 import AddTransactionFrom from './../routes/transactions/add-transaction-form'
+
+import DeleteUserForm from './../routes/users/delete-user-form'
 
 // Material Icons
 import AddIcon from '@material-ui/icons/Add'
@@ -82,10 +81,6 @@ export default function TableToolbar (props) {
     setOpenDelete(false)
   }
 
-  function handleDeleteItems () {
-    handleCloseDelete()
-  }
-
   return (
     <Toolbar className={clsx(classes.root, {
       [classes.highlight]: selected.length > 0
@@ -139,15 +134,7 @@ export default function TableToolbar (props) {
         open={openDelete}
       >
         <DialogTitle id='form-dialog-delete-title'>Delete the selected {selected.length > 1 ? dataTypePlural : dataType}?</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Hitting delete will proceed to delete the selected {selected.length > 1 ? dataTypePlural : dataType}. Please note that this action cannot be undone.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions className={classes.dialogActions}>
-          <Button className={classes.dialogButton} color='primary' onClick={handleCloseDelete}>Cancel</Button>
-          <Button className={classes.dialogButton} color='secondary' onClick={handleDeleteItems} variant='contained'>Delete</Button>
-        </DialogActions>
+        {dataType === 'User' ? <DeleteUserForm handleCloseDelete={handleCloseDelete} selectedUsers={selected} /> : null}
       </Dialog>
     </Toolbar>
   )
