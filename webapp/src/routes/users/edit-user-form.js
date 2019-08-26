@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { Mutation } from 'react-apollo'
+import gql from 'graphql-tag'
 
 // Material UI
 import TextField from '@material-ui/core/TextField'
@@ -28,32 +30,55 @@ export default function EditUserForm (props) {
     handleCloseEdit()
   }
 
+  const EDIT_USER_GQL = gql`
+  mutation editUser($id: String, $name: String, $email: String) {
+    updateUser(id: $id, name: $name, email: $email) {
+      id
+      name
+      email
+    }
+  }
+  `
+
   return (
-    <form className={classes.container}>
-      <TextField
-        className={classes.textField}
-        fullWidth
-        id='name'
-        label='Name'
-        onChange={handleChange('name')}
-        value={values.name}
-        variant='outlined'
-      />
-      <TextField
-        className={classes.textField}
-        fullWidth
-        id='email'
-        label='Email'
-        onChange={handleChange('email')}
-        type='email'
-        value={values.email}
-        variant='outlined'
-      />
-      <div className={classes.actions}>
-        <Button className={classes.button} color='primary' onClick={handleClickEdit} variant='contained'>Update User</Button>
-        <Button className={classes.button} color='secondary' onClick={handleCancel}>Cancel</Button>
-      </div>
-    </form>
+    <Fragment>
+      <Mutation mutation={EDIT_USER_GQL}>
+        {(editUser, { loading, data }) => {
+          return (
+            <form className={classes.container} onSubmit={(event) => {
+              const id = values.id
+              const name = values.name
+              const email = values.email.toLowerCase()
+              editUser({ variables: { id, name, email } })
+            }}>
+              <TextField
+                className={classes.textField}
+                fullWidth
+                id='name'
+                label='Name'
+                onChange={handleChange('name')}
+                value={values.name}
+                variant='outlined'
+              />
+              <TextField
+                className={classes.textField}
+                fullWidth
+                id='email'
+                label='Email'
+                onChange={handleChange('email')}
+                type='email'
+                value={values.email}
+                variant='outlined'
+              />
+              <div className={classes.actions}>
+                <Button className={classes.button} color='primary' onClick={handleClickEdit} type='submit' variant='contained'>Update User</Button>
+                <Button className={classes.button} color='secondary' onClick={handleCancel}>Cancel</Button>
+              </div>
+            </form>
+          )
+        }}
+      </Mutation>
+    </Fragment>
   )
 }
 

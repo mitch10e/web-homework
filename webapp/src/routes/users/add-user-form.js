@@ -46,8 +46,7 @@ export default function AddUserForm (props) {
           return (
             <form className={classes.container} onSubmit={(event) => {
               const name = values.name
-              const email = values.email
-              console.log(name)
+              const email = values.email.toLowerCase()
               addUser({ variables: { name, email } })
             }}>
               <TextField
@@ -70,13 +69,7 @@ export default function AddUserForm (props) {
                 variant='outlined'
               />
               <div className={classes.actions}>
-                <Button
-                  className={classes.button}
-                  color='primary'
-                  onClick={handleClickAdd}
-                  type='submit'
-                  variant='contained'
-                >Add User</Button>
+                <Button className={classes.button} color='primary' onClick={handleClickAdd} type='submit' variant='contained'>Add User</Button>
                 <Button className={classes.button} color='secondary' onClick={handleCancel}>Cancel</Button>
               </div>
             </form>
