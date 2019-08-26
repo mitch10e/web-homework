@@ -39,6 +39,7 @@ export default function UsersTable (props) {
     name: '',
     email: ''
   }
+
   const [openEdit, setOpenEdit] = React.useState(false)
   const [editUser, setEditUser] = React.useState(defaultEditUser)
 
@@ -165,8 +166,6 @@ export default function UsersTable (props) {
                   <TableCell component='th' scope='row'>{user.id}</TableCell>
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.created}</TableCell>
-                  <TableCell>{user.updated}</TableCell>
                 </TableRow>
               )
             })}
