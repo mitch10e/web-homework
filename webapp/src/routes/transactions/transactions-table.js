@@ -23,9 +23,9 @@ import EditTransactionForm from './edit-transaction-form'
 
 TransactionsTable.propTypes = {
   transactions: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    user: PropTypes.number.isRequired,
-    merchant: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
+    user: PropTypes.string.isRequired,
+    merchant: PropTypes.string.isRequired,
     cost: PropTypes.number.isRequired,
     tax: PropTypes.number.isRequired,
     date: PropTypes.string.isRequired
@@ -40,9 +40,9 @@ export default function TransactionsTable (props) {
 
   // Editing
   const defaultEditTransaction = {
-    id: -1,
-    user: -1,
-    merchant: -1,
+    id: '',
+    user: '',
+    merchant: '',
     cost: 0,
     tax: 0
   }

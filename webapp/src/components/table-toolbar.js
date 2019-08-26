@@ -154,7 +154,7 @@ export default function TableToolbar (props) {
 }
 
 TableToolbar.propTypes = {
-  selected: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
+  selected: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   dataType: PropTypes.oneOf(['User', 'Merchant', 'Transaction']).isRequired,
   dataTypePlural: PropTypes.string.isRequired,
   users: PropTypes.arrayOf(PropTypes.object.isRequired),

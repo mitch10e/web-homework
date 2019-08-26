@@ -15,19 +15,11 @@ import TablePagination from '@material-ui/core/TablePagination'
 import { stableSort, getSorting } from './../../component-logic/table-sort'
 import { tableStyles } from './../../component-logic/table-styles'
 
-// Material UI - Dialog
-import Dialog from '@material-ui/core/Dialog'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import DialogContent from '@material-ui/core/DialogContent'
-import EditMerchantForm from './edit-merchant-form'
-
 MerchantsTable.propTypes = {
   merchants: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    created: PropTypes.string.isRequired,
-    updated: PropTypes.string
+    email: PropTypes.string.isRequired
   })).isRequired
 }
 
@@ -35,16 +27,6 @@ export default function MerchantsTable (props) {
   const classes = tableStyles()
   const { merchants } = props
 
-  // Editing
-  const defaultEditMerchant = {
-    id: -1,
-    name: '',
-    email: ''
-  }
-  const [openEdit, setOpenEdit] = React.useState(false)
-  const [editMerchant, setEditMerchant] = React.useState(defaultEditMerchant)
-
-  // Sorting
   const [order, setOrder] = React.useState('asc')
   const [orderBy, setOrderBy] = React.useState('id')
   const [selected, setSelected] = React.useState([])
@@ -69,12 +51,6 @@ export default function MerchantsTable (props) {
   }
 
   const handleClick = (event, id) => {
-    if (!event.target.tagName === 'INPUT') {
-      return
-    } else {
-      event.stopPropagation()
-    }
-
     const selectedIndex = selected.indexOf(id)
     let newSelected = []
 
@@ -103,24 +79,10 @@ export default function MerchantsTable (props) {
     setPage(0)
   }
 
-  const handleClickToEdit = (event, id) => {
-    let selectedMerchant = merchants.find(merchant => merchant.id === id)
-    if (selectedMerchant) {
-      setEditMerchant(selectedMerchant)
-      setOpenEdit(true)
-    }
-  }
-
-  const handleCloseEdit = () => {
-    setOpenEdit(false)
-  }
-
   const merchantHeaders = [
     { id: 'id', numeric: false, disablePadding: false, label: 'ID' },
     { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
-    { id: 'email', numeric: false, disablePadding: false, label: 'Email' },
-    { id: 'created', numeric: false, disablePadding: false, label: 'Created' },
-    { id: 'updated', numeric: false, disablePadding: false, label: 'Updated' }
+    { id: 'email', numeric: false, disablePadding: false, label: 'Email' }
   ]
 
   return (
@@ -154,7 +116,6 @@ export default function MerchantsTable (props) {
                   aria-checked={isItemSelected}
                   hover
                   key={merchant.id}
-                  onClick={event => handleClickToEdit(event, merchant.id)}
                   role='checkbox'
                   selected={isItemSelected}
                   tabIndex={-1}
@@ -196,17 +157,6 @@ export default function MerchantsTable (props) {
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 15, 20, 25]}
       />
-      <Dialog
-        aria-labelledby='form-dialog-edit-title'
-        fullWidth
-        onClose={handleCloseEdit}
-        open={openEdit}
-      >
-        <DialogTitle id='form-dialog-edit-title'>Edit Merchant (id: {editMerchant.id})</DialogTitle>
-        <DialogContent>
-          <EditMerchantForm handleCloseEdit={handleCloseEdit} merchant={editMerchant} />
-        </DialogContent>
-      </Dialog>
     </Paper>
   )
 }

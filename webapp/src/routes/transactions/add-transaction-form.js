@@ -113,11 +113,11 @@ export default function AddTransactionForm (props) {
 
 AddTransactionForm.propTypes = {
   users: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired
   }).isRequired).isRequired,
   merchants: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired
   }).isRequired).isRequired,
   handleCloseAdd: PropTypes.func.isRequired

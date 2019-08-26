@@ -117,17 +117,17 @@ export default function EditTransactionForm (props) {
 
 EditTransactionForm.propTypes = {
   users: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired
   }).isRequired).isRequired,
   merchants: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired
   }).isRequired).isRequired,
   transaction: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    user: PropTypes.number.isRequired,
-    merchant: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
+    user: PropTypes.string.isRequired,
+    merchant: PropTypes.string.isRequired,
     cost: PropTypes.number.isRequired,
     tax: PropTypes.number.isRequired
   }).isRequired,
