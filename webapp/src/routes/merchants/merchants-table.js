@@ -67,6 +67,12 @@ export default function MerchantsTable (props) {
   }
 
   const handleClick = (event, id) => {
+    if (!event.target.tagName === 'INPUT') {
+      return
+    } else {
+      event.stopPropagation()
+    }
+
     const selectedIndex = selected.indexOf(id)
     let newSelected = []
 
