@@ -22,8 +22,6 @@ module.exports = function (app, opts) {
     })
   )
 
-  // API routes
-
   app.use(/(?!\/graphql)/, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'))
   })
