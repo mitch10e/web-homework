@@ -1,5 +1,5 @@
 const graphql = require('graphql')
-const { GraphQLObjectType, GraphQLString, GraphQLBoolean, GraphQLFloat } = graphql
+const { GraphQLObjectType, GraphQLString, GraphQLBoolean, GraphQLFloat, GraphQLList } = graphql
 
 const { MerchantModel } = require('./../data-models/Merchant')
 const MerchantType = require('./merchant-type')
@@ -111,6 +111,15 @@ const mutation = new GraphQLObjectType({
       },
       resolve (parentValue, { id }) {
         return Users.deleteById(id)
+      }
+    },
+    deleteUsers: {
+      type: UserType,
+      args: {
+        ids: { type: new GraphQLList(GraphQLString) }
+      },
+      resolve (parentValue, { ids }) {
+        return Users.deleteManyByIds(ids)
       }
     },
     updateUser: {
