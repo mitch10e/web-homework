@@ -36,6 +36,15 @@ const mutation = new GraphQLObjectType({
         return Merchants.deleteById(id)
       }
     },
+    deleteMerchants: {
+      type: MerchantType,
+      args: {
+        ids: { type: new GraphQLList(GraphQLString) }
+      },
+      resolve (parentValue, { ids }) {
+        return Merchants.deleteManyByIds(ids)
+      }
+    },
     updateMerchant: {
       type: MerchantType,
       args: {
@@ -44,6 +53,7 @@ const mutation = new GraphQLObjectType({
         email: { type: GraphQLString }
       },
       resolve (parentValue, args) {
+        console.log("**********\n\n**********")
         return Merchants.updateById(args)
       }
     },
@@ -73,6 +83,15 @@ const mutation = new GraphQLObjectType({
       },
       resolve (parentValue, { id }) {
         return Transactions.deleteById(id)
+      }
+    },
+    deleteTransactions: {
+      type: TransactionType,
+      args: {
+        ids: { type: new GraphQLList(GraphQLString) }
+      },
+      resolve (parentValue, { ids }) {
+        return Transactions.deleteManyByIds(ids)
       }
     },
     updateTransaction: {

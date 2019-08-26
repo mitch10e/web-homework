@@ -19,6 +19,7 @@ import AddUserForm from './../routes/users/add-user-form'
 import AddMerchantForm from './../routes/merchants/add-merchant-form'
 import AddTransactionFrom from './../routes/transactions/add-transaction-form'
 
+import DeleteMerchantForm from './../routes/merchants/delete-merchant-form'
 import DeleteUserForm from './../routes/users/delete-user-form'
 
 // Material Icons
@@ -135,6 +136,7 @@ export default function TableToolbar (props) {
       >
         <DialogTitle id='form-dialog-delete-title'>Delete the selected {selected.length > 1 ? dataTypePlural : dataType}?</DialogTitle>
         {dataType === 'User' ? <DeleteUserForm handleCloseDelete={handleCloseDelete} selectedUsers={selected} /> : null}
+        {dataType === 'Merchant' ? <DeleteMerchantForm handleCloseDelete={handleCloseDelete} selectedMerchants={selected} /> : null}
       </Dialog>
     </Toolbar>
   )

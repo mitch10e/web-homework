@@ -43,9 +43,18 @@ async function deleteById (id) {
   return packageModel(transaction)[0] || null
 }
 
+async function deleteManyByIds (ids) {
+  // NOTE: Need to use _id because this is coming in, not going out, so the packageModel won't do this for us.
+  const query = TransactionModel.deleteMany({ _id: { $in: ids } })
+  var deletedCount = await query.exec()
+
+  return deletedCount
+}
+
 module.exports = {
   find,
   findOne,
   updateById,
-  deleteById
+  deleteById,
+  deleteManyByIds
 }

@@ -26,8 +26,7 @@ async function updateById (args) {
     delete args.id
   }
 
-  const query = MerchantModel.findByIdAndUpdate(id, args,
-    {
+  const query = MerchantModel.findByIdAndUpdate(id, args, {
       new: true,
       upsert: true
     })
@@ -43,9 +42,18 @@ async function deleteById (id) {
   return packageModel(merchant)[0] || null
 }
 
+async function deleteManyByIds (ids) {
+    // NOTE: Need to use _id because this is coming in, not going out, so the packageModel won't do this for us.
+    const query = MerchantModel.deleteMany({ _id: { $in: ids } })
+    var deletedCount = await query.exec()
+  
+    return deletedCount
+}
+
 module.exports = {
   find,
   findOne,
   updateById,
-  deleteById
+  deleteById,
+  deleteManyByIds
 }
