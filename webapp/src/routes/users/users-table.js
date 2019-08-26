@@ -1,5 +1,6 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { Query } from 'react-apollo'
+import gql from 'graphql-tag'
 
 import TableToolbar from './../../components/table-toolbar'
 import TableHeader from './../../components/table-header'
@@ -21,23 +22,12 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import EditUserForm from './edit-user-form'
 
-UsersTable.propTypes = {
-  users: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    created: PropTypes.string.isRequired,
-    updated: PropTypes.string
-  })).isRequired
-}
-
-export default function UsersTable (props) {
+export default function UsersTable () {
   const classes = tableStyles()
-  const { users } = props
 
   // Editing
   const defaultEditUser = {
-    id: -1,
+    id: '',
     name: '',
     email: ''
   }
@@ -59,7 +49,7 @@ export default function UsersTable (props) {
     setOrderBy(property)
   }
 
-  const handleSelectAllClick = (event) => {
+  const handleSelectAllClick = (event, users) => {
     if (event.target.checked) {
       const newSelecteds = users.map(user => user.id)
       setSelected(newSelecteds)
@@ -103,7 +93,7 @@ export default function UsersTable (props) {
     setPage(0)
   }
 
-  const handleClickToEdit = (event, id) => {
+  const handleClickToEdit = (event, id, users) => {
     let selectedUser = users.find(user => user.id === id)
     if (selectedUser) {
       setEditUser(selectedUser)
@@ -118,95 +108,108 @@ export default function UsersTable (props) {
   const userHeaders = [
     { id: 'id', numeric: false, disablePadding: false, label: 'ID' },
     { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
-    { id: 'email', numeric: false, disablePadding: false, label: 'Email' },
-    { id: 'created', numeric: false, disablePadding: false, label: 'Created' },
-    { id: 'updated', numeric: false, disablePadding: false, label: 'Updated' }
+    { id: 'email', numeric: false, disablePadding: false, label: 'Email' }
   ]
 
   return (
-    <Paper className={classes.root}>
-      <TableToolbar
-        dataType={'User'}
-        dataTypePlural={'Users'}
-        selected={selected}
-      />
-      <Table className={classes.table}>
-        <TableHeader
-          classes={classes}
-          dataTypePlural={'Users'}
-          headers={userHeaders}
-          numSelected={selected.length}
-          onRequestSort={handleRequestSort}
-          onSelectAllClick={handleSelectAllClick}
-          order={order}
-          orderBy={orderBy}
-          rowCount={users.length}
-        />
-        <TableBody>
-          {stableSort(users, getSorting(order, orderBy))
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((user, index) => {
-              const isItemSelected = isSelected(user.id)
-              const labelId = 'enhanced-table-checkbox-' + index
+    <Query query={gql`query GetUsers {
+      users {
+        id
+        name
+        email
+      }
+    }`
+    }>
+      {({ loading, error, data }) => {
+        if (loading) { return <span /> }
+        if (error) { return <p>ERROR</p> }
+        return (
+          <Paper className={classes.root}>
+            <TableToolbar
+              dataType={'User'}
+              dataTypePlural={'Users'}
+              selected={selected}
+            />
+            <Table className={classes.table}>
+              <TableHeader
+                classes={classes}
+                dataTypePlural={'Users'}
+                headers={userHeaders}
+                numSelected={selected.length}
+                onRequestSort={handleRequestSort}
+                onSelectAllClick={handleSelectAllClick}
+                order={order}
+                orderBy={orderBy}
+                rowCount={data.users.length}
+              />
+              <TableBody>
+                {stableSort(data.users, getSorting(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((user, index) => {
+                    const isItemSelected = isSelected(user.id)
+                    const labelId = 'enhanced-table-checkbox-' + index
 
-              return (
-                <TableRow
-                  aria-checked={isItemSelected}
-                  hover
-                  key={user.id}
-                  onClick={event => handleClickToEdit(event, user.id)}
-                  role='checkbox'
-                  selected={isItemSelected}
-                  tabIndex={-1}
-                >
-                  <TableCell padding='checkbox'>
-                    <Checkbox
-                      checked={isItemSelected}
-                      inputProps={{ 'aria-labelledby': labelId }}
-                      onClick={event => handleClick(event, user.id)}
-                    />
-                  </TableCell>
-                  <TableCell component='th' scope='row'>{user.id}</TableCell>
-                  <TableCell>{user.name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.created}</TableCell>
-                  <TableCell>{user.updated}</TableCell>
-                </TableRow>
-              )
-            })}
-          {emptyRows > 0 && (
-            <TableRow style={{ height: 49 * emptyRows }}>
-              <TableCell colSpan={6} />
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-      <TablePagination
-        backIconButtonProps={{
-          'aria-label': 'previous page'
-        }}
-        component='div'
-        count={users.length}
-        nextIconButtonProps={{
-          'aria-label': 'next page'
-        }}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5, 10, 15, 20, 25]}
-      />
-      <Dialog
-        aria-labelledby='form-dialog-edit-title'
-        fullWidth
-        onClose={handleCloseEdit}
-        open={openEdit}
-      >
-        <DialogTitle id='form-dialog-edit-title'>Edit User (id: {editUser.id})</DialogTitle>
-        <DialogContent>
-          <EditUserForm handleCloseEdit={handleCloseEdit} user={editUser} />
-        </DialogContent>
-      </Dialog>
-    </Paper>
+                    return (
+                      <TableRow
+                        aria-checked={isItemSelected}
+                        hover
+                        key={user.id}
+                        onClick={event => handleClickToEdit(event, user.id, data.users)}
+                        role='checkbox'
+                        selected={isItemSelected}
+                        tabIndex={-1}
+                      >
+                        <TableCell padding='checkbox'>
+                          <Checkbox
+                            checked={isItemSelected}
+                            inputProps={{ 'aria-labelledby': labelId }}
+                            onClick={event => handleClick(event, user.id)}
+                          />
+                        </TableCell>
+                        <TableCell component='th' scope='row'>{user.id}</TableCell>
+                        <TableCell>{user.name}</TableCell>
+                        <TableCell>{user.email}</TableCell>
+                        <TableCell>{user.created}</TableCell>
+                        <TableCell>{user.updated}</TableCell>
+                      </TableRow>
+                    )
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 49 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+            <TablePagination
+              backIconButtonProps={{
+                'aria-label': 'previous page'
+              }}
+              component='div'
+              count={data.users.length}
+              nextIconButtonProps={{
+                'aria-label': 'next page'
+              }}
+              onChangePage={handleChangePage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+              page={page}
+              rowsPerPage={rowsPerPage}
+              rowsPerPageOptions={[5, 10, 15, 20, 25]}
+            />
+            <Dialog
+              aria-labelledby='form-dialog-edit-title'
+              fullWidth
+              onClose={handleCloseEdit}
+              open={openEdit}
+            >
+              <DialogTitle id='form-dialog-edit-title'>Edit User (id: {editUser.id})</DialogTitle>
+              <DialogContent>
+                <EditUserForm handleCloseEdit={handleCloseEdit} user={editUser} />
+              </DialogContent>
+            </Dialog>
+          </Paper>
+        )
+      }}
+    </Query>
   )
 }

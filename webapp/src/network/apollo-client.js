@@ -4,7 +4,6 @@ import { withClientState } from 'apollo-link-state'
 import { ApolloLink, Observable } from 'apollo-link'
 import ApolloClient from 'apollo-client/ApolloClient'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import gql from 'graphql-tag'
 
 const SERVER_URL = 'http://localhost:8000/graphql'
 
@@ -68,15 +67,5 @@ export const client = new ApolloClient({
   ]),
   cache
 })
-
-client.query({
-  query: gql`query GetUsers {
-    users {
-      id
-      name
-      email
-    }
-  }`
-}).then(result => console.log(result))
 
 window.__APOLLO_CLIENT__ = client

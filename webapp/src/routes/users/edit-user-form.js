@@ -59,7 +59,7 @@ export default function EditUserForm (props) {
 
 EditUserForm.propTypes = {
   user: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired
   }),
