@@ -130,8 +130,6 @@ export default function MerchantsTable (props) {
                   <TableCell component='th' scope='row'>{merchant.id}</TableCell>
                   <TableCell>{merchant.name}</TableCell>
                   <TableCell>{merchant.email}</TableCell>
-                  <TableCell>{merchant.created}</TableCell>
-                  <TableCell>{merchant.updated}</TableCell>
                 </TableRow>
               )
             })}
