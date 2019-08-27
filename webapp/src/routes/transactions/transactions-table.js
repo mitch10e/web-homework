@@ -24,11 +24,13 @@ import EditTransactionForm from './edit-transaction-form'
 TransactionsTable.propTypes = {
   transactions: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
-    user: PropTypes.string.isRequired,
-    merchant: PropTypes.string.isRequired,
+    user_id: PropTypes.string.isRequired,
+    merchant_id: PropTypes.string.isRequired,
     cost: PropTypes.number.isRequired,
     tax: PropTypes.number.isRequired,
-    date: PropTypes.string.isRequired
+    date: PropTypes.string.isRequired,
+    credit: PropTypes.bool.isRequired,
+    debit: PropTypes.bool.isRequired
   })).isRequired,
   users: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   merchants: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired
@@ -41,10 +43,14 @@ export default function TransactionsTable (props) {
   // Editing
   const defaultEditTransaction = {
     id: '',
-    user: '',
-    merchant: '',
+    user_id: '',
+    merchant_id: '',
     cost: 0,
-    tax: 0
+    tax: 0,
+    date: new Date(),
+    credit: false,
+    debit: false,
+    description: ''
   }
   const [openEdit, setOpenEdit] = React.useState(false)
   const [editTransaction, setEditTransaction] = React.useState(defaultEditTransaction)
@@ -120,6 +126,22 @@ export default function TransactionsTable (props) {
     setOpenEdit(false)
   }
 
+  const getUserByID = (id) => {
+    let user = users.find(user => user.id === id)
+    if (!user) {
+      user = { name: '' }
+    }
+    return user
+  }
+
+  const getMerchantByID = (id) => {
+    let merchant = merchants.find(merchant => merchant.id === id)
+    if (!merchant) {
+      merchant = { name: '' }
+    }
+    return merchant
+  }
+
   const transactionHeaders = [
     { id: 'id', numeric: false, disablePadding: false, label: 'ID' },
     { id: 'user', numeric: false, disablePadding: false, label: 'User' },
@@ -127,7 +149,8 @@ export default function TransactionsTable (props) {
     { id: 'cost', numeric: true, disablePadding: false, label: 'Cost' },
     { id: 'tax', numeric: true, disablePadding: false, label: 'Tax' },
     { id: 'total', numeric: true, disablePadding: false, label: 'Total Cost' },
-    { id: 'date', numeric: false, disablePadding: false, label: 'Date' }
+    { id: 'date', numeric: false, disablePadding: false, label: 'Date' },
+    { id: 'type', numeric: false, disablePadding: false, label: 'Debit or Credit' }
   ]
 
   return (
@@ -176,12 +199,13 @@ export default function TransactionsTable (props) {
                     />
                   </TableCell>
                   <TableCell component='th' scope='row'>{transaction.id}</TableCell>
-                  <TableCell>{users.find(user => user.id === transaction.user).name}</TableCell>
-                  <TableCell>{merchants.find(merchant => merchant.id === transaction.merchant).name}</TableCell>
+                  <TableCell>{getUserByID(transaction.user_id).name}</TableCell>
+                  <TableCell>{getMerchantByID(transaction.merchant_id).name}</TableCell>
                   <TableCell align='right'>${transaction.cost.toFixed(2)}</TableCell>
                   <TableCell align='right'>${transaction.tax.toFixed(2)}</TableCell>
                   <TableCell align='right'>${(transaction.cost + transaction.tax).toFixed(2)}</TableCell>
-                  <TableCell>{transaction.date}</TableCell>
+                  <TableCell>{(new Date(transaction.date)).toUTCString()}</TableCell>
+                  <TableCell>{transaction.credit ? 'Credit' : 'Debit'}</TableCell>
                 </TableRow>
               )
             })}

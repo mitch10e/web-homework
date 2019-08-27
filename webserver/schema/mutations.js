@@ -67,13 +67,14 @@ const mutation = new GraphQLObjectType({
         merchant_id: { type: GraphQLString },
         cost: { type: GraphQLFloat },
         tax: { type: GraphQLFloat },
+        date: { type: GraphQLString },
         debit: { type: GraphQLBoolean },
         credit: { type: GraphQLBoolean },
         description: { type: GraphQLString }
       },
       /* eslint-disable-next-line camelcase */
-      resolve (parentValue, { user_id, merchant_id, cost, tax, debit, credit, description }) {
-        return (new TransactionModel({ user_id, merchant_id, cost, tax, debit, credit, description })).save()
+      resolve (parentValue, { user_id, merchant_id, cost, tax, date, debit, credit, description }) {
+        return (new TransactionModel({ user_id, merchant_id, cost, tax, date, debit, credit, description })).save()
       }
     },
     deleteTransaction: {
@@ -102,6 +103,7 @@ const mutation = new GraphQLObjectType({
         merchant_id: { type: GraphQLString },
         cost: { type: GraphQLFloat },
         tax: { type: GraphQLFloat },
+        date: { type: GraphQLString },
         debit: { type: GraphQLBoolean },
         credit: { type: GraphQLBoolean },
         description: { type: GraphQLString }

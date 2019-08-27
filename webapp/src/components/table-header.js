@@ -17,14 +17,16 @@ export default function TableHeader (props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding='checkbox'>
-          <Checkbox
-            checked={numSelected === rowCount}
-            indeterminate={numSelected > 0 && numSelected > rowCount}
-            inputProps={{ 'aria-label': 'select all' + dataTypePlural }}
-            onChange={onSelectAllClick}
-          />
-        </TableCell>
+        {rowCount > 0 ? (
+          <TableCell padding='checkbox'>
+            <Checkbox
+              checked={numSelected === rowCount}
+              indeterminate={numSelected > 0 && numSelected > rowCount}
+              inputProps={{ 'aria-label': 'select all' + dataTypePlural }}
+              onChange={onSelectAllClick}
+            />
+          </TableCell>
+        ) : null}
         {headers.map(row => (
           <TableCell
             align={row.numeric ? 'right' : 'left'}

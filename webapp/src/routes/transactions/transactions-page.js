@@ -35,6 +35,7 @@ export function Transactions () {
     tax
     debit
     credit
+    date
     description
   }
 }`

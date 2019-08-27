@@ -11,19 +11,53 @@ import { formStyles } from './../../component-logic/form-styles'
 export default function EditTransactionForm (props) {
   const classes = formStyles()
   const { transaction, users, merchants, handleCloseEdit } = props
-  const currentUser = users.find(user => user.id === transaction.user)
-  const currentMerchant = merchants.find(merchant => merchant.id === transaction.merchant)
+
+  const getUserNameByID = (id) => {
+    if (!id) return ''
+    return users.find(user => user.id === id).name
+  }
+
+  const getMerchantNameByID = (id) => {
+    if (!id) return ''
+    return merchants.find(merchant => merchant.id === values.merchant_id).name
+  }
 
   const [values, setValues] = React.useState({
     id: transaction.id,
-    user: currentUser.name,
-    merchant: currentMerchant.name,
+    user_id: transaction.user_id,
+    merchant_id: transaction.merchant_id,
     cost: transaction.cost,
-    tax: transaction.tax
+    tax: transaction.tax,
+    date: new Date(transaction.date),
+    credit: transaction.credit,
+    debit: transaction.debit,
+    description: transaction.description
   })
 
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value })
+  }
+
+  const handleChangeSelectUser = (name) => event => {
+    // This is not a good way to handle this, as duplicate user names will collide and
+    // you could possibly assign the wrong user. However, I don't want to use up too
+    // much time on this trying to get the data validation correct, so for now
+    // this will have to do.
+    let username = event.target.value
+    let userID = users.find(user => user.name === username).id
+
+    setValues({ ...values, [name]: userID })
+  }
+
+  const handleChangeSelectMerchant = (name) => event => {
+    // This is not a good way to handle this, as duplicate merchant names will collide and
+    // you could possibly assign the wrong merchant. However, I don't want to use up too
+    // much time on this trying to get the data validation correct, so for now
+    // this will have to do.
+    let merchantName = event.target.value
+    let merchantID = merchants.find(merchant => merchant.name === merchantName).id
+
+    setValues({ ...values, [name]: merchantID })
   }
 
   const handleClickEdit = () => {
@@ -48,13 +82,13 @@ export default function EditTransactionForm (props) {
         id='outlined-select-user'
         label='User'
         margin='normal'
-        onChange={handleChange('user')}
+        onChange={handleChangeSelectUser('user_id')}
         select
-        value={values.user}
+        value={getUserNameByID(values.user_id)}
         variant='outlined'
       >
         {users.map(user => (
-          <MenuItem key={user.id} value={user.name}>
+          <MenuItem key={user.id} value={user.name} >
             {user.name}
           </MenuItem>
         ))}
@@ -71,9 +105,9 @@ export default function EditTransactionForm (props) {
         id='outlined-select-merchant'
         label='Merchant'
         margin='normal'
-        onChange={handleChange('merchant')}
+        onChange={handleChangeSelectMerchant('merchant_id')}
         select
-        value={values.merchant}
+        value={getMerchantNameByID(values.merchant_id)}
         variant='outlined'
       >
         {merchants.map(merchant => (
@@ -126,10 +160,13 @@ EditTransactionForm.propTypes = {
   }).isRequired).isRequired,
   transaction: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    user: PropTypes.string.isRequired,
-    merchant: PropTypes.string.isRequired,
+    user_id: PropTypes.string.isRequired,
+    merchant_id: PropTypes.string.isRequired,
     cost: PropTypes.number.isRequired,
-    tax: PropTypes.number.isRequired
+    tax: PropTypes.number.isRequired,
+    credit: PropTypes.bool.isRequired,
+    debit: PropTypes.bool.isRequired,
+    description: PropTypes.string.isRequired
   }).isRequired,
   handleCloseEdit: PropTypes.func.isRequired
 }
