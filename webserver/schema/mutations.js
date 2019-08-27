@@ -53,7 +53,6 @@ const mutation = new GraphQLObjectType({
         email: { type: GraphQLString }
       },
       resolve (parentValue, args) {
-        console.log("**********\n\n**********")
         return Merchants.updateById(args)
       }
     },

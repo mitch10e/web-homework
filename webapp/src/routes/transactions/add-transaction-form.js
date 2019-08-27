@@ -13,7 +13,7 @@ import { formStyles } from './../../component-logic/form-styles'
 // Date Picker
 import 'date-fns'
 import DateFnsUtils from '@date-io/date-fns'
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
+import { MuiPickersUtilsProvider, DatePicker } from '@material-ui/pickers'
 
 export default function AddTransactionForm (props) {
   const classes = formStyles()
@@ -30,6 +30,10 @@ export default function AddTransactionForm (props) {
 
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value })
+  }
+
+  const handleChangeDate = name => value => {
+    setValues({ ...values, [name]: value })
   }
 
   const getUserNameByID = (id) => {
@@ -191,10 +195,7 @@ export default function AddTransactionForm (props) {
                 ))}
               </TextField>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
-                  KeyboardButtonProps={{
-                    'aria-label': 'change date'
-                  }}
+                <DatePicker
                   className={classes.textField}
                   disableFuture
                   disableToolbar
@@ -203,7 +204,7 @@ export default function AddTransactionForm (props) {
                   id='date-picker-inline'
                   inputVariant='outlined'
                   label='Date'
-                  onChange={handleChange('date')}
+                  onChange={handleChangeDate('date')}
                   value={values.date}
                 />
               </MuiPickersUtilsProvider>

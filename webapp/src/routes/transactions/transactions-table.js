@@ -47,7 +47,7 @@ export default function TransactionsTable (props) {
     merchant_id: '',
     cost: 0,
     tax: 0,
-    date: new Date(),
+    date: '',
     credit: false,
     debit: false,
     description: ''
