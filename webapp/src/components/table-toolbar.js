@@ -1,6 +1,7 @@
 import React from 'react'
 import clsx from 'clsx'
 import PropTypes from 'prop-types'
+import { useTranslation } from 'react-i18next'
 
 // Material UI
 import { lighten, makeStyles } from '@material-ui/core/styles'
@@ -21,6 +22,7 @@ import AddTransactionFrom from './../routes/transactions/add-transaction-form'
 
 import DeleteMerchantForm from './../routes/merchants/delete-merchant-form'
 import DeleteUserForm from './../routes/users/delete-user-form'
+import DeleteTransactionForm from '../routes/transactions/delete-transaction-form'
 
 // Material Icons
 import AddIcon from '@material-ui/icons/Add'
@@ -62,6 +64,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function TableToolbar (props) {
   const classes = useStyles()
+  const { t } = useTranslation()
   const { selected, dataType, dataTypePlural, users, merchants } = props
   const [openAdd, setOpenAdd] = React.useState(false)
   const [openDelete, setOpenDelete] = React.useState(false)
@@ -88,7 +91,7 @@ export default function TableToolbar (props) {
     })}>
       <div className={classes.title}>
         {selected.length > 0 ? (
-          <Typography color='inherit' variant='subtitle1'>{selected.length} selected</Typography>
+          <Typography color='inherit' variant='subtitle1'>{selected.length} {t('selected')}</Typography>
         ) : (
           <Typography id='tableTitle' variant='h6'>{dataTypePlural}</Typography>
         )}
@@ -96,7 +99,7 @@ export default function TableToolbar (props) {
       <div className={classes.spacer} />
       <div className={classes.actions}>
         {selected.length > 0 ? (
-          <Tooltip title='Delete'>
+          <Tooltip title={t('delete')}>
             <IconButton
               aria-label='delete'
               onClick={handleClickOpenDelete}
@@ -105,7 +108,7 @@ export default function TableToolbar (props) {
             </IconButton>
           </Tooltip>
         ) : (
-          <Tooltip title={'Add ' + dataType}>
+          <Tooltip title={t('add') + ' ' + dataType}>
             <IconButton
               aria-label='add'
               onClick={handleClickOpenAdd}
@@ -121,7 +124,7 @@ export default function TableToolbar (props) {
         onClose={handleCloseAdd}
         open={openAdd}
       >
-        <DialogTitle id='form-dialog-add-title'>Add New {dataType}</DialogTitle>
+        <DialogTitle id='form-dialog-add-title'>{t('addNew')} {dataType}</DialogTitle>
         <DialogContent>
           {dataType === 'User' ? <AddUserForm handleCloseAdd={handleCloseAdd} /> : null}
           {dataType === 'Merchant' ? <AddMerchantForm handleCloseAdd={handleCloseAdd} /> : null}
@@ -134,9 +137,10 @@ export default function TableToolbar (props) {
         onClose={handleCloseDelete}
         open={openDelete}
       >
-        <DialogTitle id='form-dialog-delete-title'>Delete the selected {selected.length > 1 ? dataTypePlural : dataType}?</DialogTitle>
+        <DialogTitle id='form-dialog-delete-title'>{t('deleteSelected')} {selected.length > 1 ? dataTypePlural : dataType}?</DialogTitle>
         {dataType === 'User' ? <DeleteUserForm handleCloseDelete={handleCloseDelete} selectedUsers={selected} /> : null}
         {dataType === 'Merchant' ? <DeleteMerchantForm handleCloseDelete={handleCloseDelete} selectedMerchants={selected} /> : null}
+        {dataType === 'Transaction' ? <DeleteTransactionForm handleCloseDelete={handleCloseDelete} selectedTransactions={selected} /> : null }
       </Dialog>
     </Toolbar>
   )

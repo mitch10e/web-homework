@@ -1,6 +1,7 @@
 // React
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 // Material UI
 import { makeStyles } from '@material-ui/core/styles'
@@ -35,6 +36,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function NavDrawer () {
   const classes = useStyles()
+  const { t } = useTranslation()
 
   return (
     <div className={classes.root}>
@@ -46,31 +48,31 @@ export default function NavDrawer () {
             <ListItemIcon>
               <PieChartIcon />
             </ListItemIcon>
-            <ListItemText primary='Charts' />
+            <ListItemText primary={t('charts')} />
           </ListItem>
           <ListItem button component={RouterLink} key='Transactions' to='/transactions'>
             <ListItemIcon>
               <CreditCardIcon />
             </ListItemIcon>
-            <ListItemText primary='Transactions' />
+            <ListItemText primary={t('transactions')} />
           </ListItem>
           <ListItem button component={RouterLink} key='Users' to='/users'>
             <ListItemIcon>
               <PersonIcon />
             </ListItemIcon>
-            <ListItemText primary='Users' />
+            <ListItemText primary={t('users')} />
           </ListItem>
           <ListItem button component={RouterLink} key='Merchants' to='/merchants'>
             <ListItemIcon>
               <ShoppingCartIcon />
             </ListItemIcon>
-            <ListItemText primary='Merchants' />
+            <ListItemText primary={t('merchants')} />
           </ListItem>
           <ListItem button component={RouterLink} key='Settings' to='/settings'>
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>
-            <ListItemText primary='Settings' />
+            <ListItemText primary={t('settings')} />
           </ListItem>
         </List>
       </Drawer>

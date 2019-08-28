@@ -2,8 +2,10 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
 import { Bar, Pie, Polar } from 'react-chartjs-2'
+import { useTranslation } from 'react-i18next'
 
 export default function Chart (props) {
+  const { t } = useTranslation()
   const { chart, filter, merchants, transactions, users } = props
 
   // https://stackoverflow.com/questions/1484506/random-color-generator
@@ -107,20 +109,20 @@ export default function Chart (props) {
       datasets: [{
         backgroundColor: displayColors,
         data: data,
-        label: 'Transaction Data'
+        label: t('transactionData')
       }],
       labels: labels
     }
   }
 
   const displayData = () => {
-    if (filter === 'Date') {
+    if (filter === t('date')) {
       return buildDateFilteredData()
     }
-    if (filter === 'Merchant') {
+    if (filter === t('merchant')) {
       return buildMerchantFilteredData()
     }
-    if (filter === 'User') {
+    if (filter === t('user')) {
       return buildUserFilteredData()
     }
     return {}
@@ -128,7 +130,7 @@ export default function Chart (props) {
 
   return (
     <Fragment>
-      {chart === 'Bar' ? (
+      {chart === t('bar') ? (
         <Bar data={displayData} options={{
           scales: {
             yAxes: [{
@@ -139,10 +141,10 @@ export default function Chart (props) {
           }
         }} />
       ) : null}
-      {chart === 'Pie' ? (
+      {chart === t('pie') ? (
         <Pie data={displayData} />
       ) : null}
-      {chart === 'Polar' ? (
+      {chart === t('polar') ? (
         <Polar data={displayData} />
       ) : null}
     </Fragment>

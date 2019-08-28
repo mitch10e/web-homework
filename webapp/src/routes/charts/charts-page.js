@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
+import { useTranslation } from 'react-i18next'
 
 import Chart from './chart'
 
@@ -12,12 +13,13 @@ import {
 } from '@material-ui/core'
 
 export function Charts () {
+  const { t } = useTranslation()
   const [transactions, setTransactions] = React.useState([])
   const [merchants, setMerchants] = React.useState([])
   const [users, setUsers] = React.useState([])
 
-  const [filter, setFilter] = React.useState('Date')
-  const [chart, setChart] = React.useState('Bar')
+  const [filter, setFilter] = React.useState(t('date'))
+  const [chart, setChart] = React.useState(t('bar'))
 
   const handleChange = name => event => {
     setFilter(event.target.value)
@@ -73,14 +75,14 @@ export function Charts () {
                       width: 250
                     }}
                     id='outlined-select-filter'
-                    label='Filter'
+                    label={t('filter')}
                     margin='normal'
                     onChange={handleChange('filter')}
                     select
                     value={filter}
                     variant='outlined'
                   >
-                    {['Date', 'Merchant', 'User'].map(f => (
+                    {[t('date'), t('merchant'), t('user')].map(f => (
                       <MenuItem key={f} value={f}>
                         {f}
                       </MenuItem>
@@ -92,14 +94,14 @@ export function Charts () {
                       marginLeft: 16
                     }}
                     id='outlined-select-chart'
-                    label='Chart Type'
+                    label={t('chartType')}
                     margin='normal'
                     onChange={handleChart('chart')}
                     select
                     value={chart}
                     variant='outlined'
                   >
-                    {['Bar', 'Pie', 'Polar'].map(c => (
+                    {[t('bar'), t('pie'), t('polar')].map(c => (
                       <MenuItem key={c} value={c}>
                         {c}
                       </MenuItem>

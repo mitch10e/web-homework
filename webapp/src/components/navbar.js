@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 // Material UI
 import { makeStyles } from '@material-ui/core/styles'
@@ -23,13 +24,14 @@ const useStyles = makeStyles(theme => ({
 
 export default function NavBar () {
   const classes = useStyles()
+  const { t } = useTranslation()
 
   return (
     <div className={classes.root}>
       <AppBar className={classes.appBar} position='fixed'>
         <Toolbar>
           <Typography className={classes.title} variant='h6'>
-            Mitchell Tenney - Homework
+            {t('title')}
           </Typography>
         </Toolbar>
       </AppBar>
