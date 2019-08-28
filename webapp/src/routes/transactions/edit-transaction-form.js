@@ -35,7 +35,7 @@ export default function EditTransactionForm (props) {
     merchant_id: transaction.merchant_id,
     cost: transaction.cost,
     tax: transaction.tax,
-    date: new Date(transaction.date),
+    date: new Date(transaction.date).toISOString().slice(0, 10),
     credit: transaction.credit,
     debit: transaction.debit,
     description: transaction.description

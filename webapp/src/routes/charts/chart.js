@@ -1,43 +1,26 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
-import { Polar } from 'react-chartjs-2'
-
-// const data = {
-//   datasets: [{
-//     data: [
-//       11,
-//       16,
-//       7,
-//       3,
-//       14
-//     ],
-//     backgroundColor: [
-//       '#FF6384',
-//       '#4BC0C0',
-//       '#FFCE56',
-//       '#E7E9ED',
-//       '#36A2EB'
-//     ],
-//     label: 'My dataset' // for legend
-//   }],
-//   labels: [
-//     'Red',
-//     'Green',
-//     'Yellow',
-//     'Grey',
-//     'Blue'
-//   ]
-// }
+import { Bar, Pie, Polar } from 'react-chartjs-2'
 
 export default function Chart (props) {
-  const { filter, merchants, transactions, users } = props
+  const { chart, filter, merchants, transactions, users } = props
+
+  // https://stackoverflow.com/questions/1484506/random-color-generator
+  function getRandomColor () {
+    var letters = '0123456789ABCDEF'
+    var color = '#'
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)]
+    }
+    return color
+  }
 
   const getAvailableDates = () => {
     var result = []
     transactions.forEach((transaction, index) => {
-      if (result.indexOf(transaction.date) === -1) {
-        result.push(transaction.date)
+      if (result.indexOf(transaction.date.slice(0, 10)) === -1) {
+        result.push(transaction.date.slice(0, 10))
       }
     })
     return result
@@ -46,7 +29,9 @@ export default function Chart (props) {
   const getAvailableMerchants = () => {
     var result = []
     transactions.forEach((transaction, index) => {
-      if (!result.find(merchant => merchant.id === transaction.merchant_id)) {
+      const merchant = merchants.find(merchant => merchant.id === transaction.merchant_id)
+      const found = result.some(merchant => merchant.id === transaction.merchant_id)
+      if (!found) {
         result.push(merchant)
       }
     })
@@ -56,7 +41,9 @@ export default function Chart (props) {
   const getAvailableUsers = () => {
     var result = []
     transactions.forEach((transaction, index) => {
-      if (!result.find(user => user.id === transaction.user_id)) {
+      const user = users.find(user => user.id === transaction.user_id)
+      const found = result.some(user => user.id === transaction.user_id)
+      if (!found) {
         result.push(user)
       }
     })
@@ -68,7 +55,7 @@ export default function Chart (props) {
     var data = []
     dates.forEach((date, index) => {
       var count = transactions.reduce((n, transaction) => {
-        return n + (transaction.date === date)
+        return n + (transaction.date.slice(0, 10) === date)
       }, 0)
 
       data.push(count)
@@ -88,7 +75,9 @@ export default function Chart (props) {
       data.push(count)
     })
 
-    return buildChartData([], data, merchantsUsed)
+    return buildChartData([], data, merchantsUsed.map((merchant) => {
+      return merchant.name
+    }))
   }
 
   const buildUserFilteredData = () => {
@@ -102,13 +91,21 @@ export default function Chart (props) {
       data.push(count)
     })
 
-    return buildChartData([], data, usersUsed)
+    return buildChartData([], data, usersUsed.map((user) => {
+      return user.name
+    }))
   }
 
   const buildChartData = (colors, data, labels) => {
+    var displayColors = colors
+    if (colors.length === 0) {
+      for (var i = 0; i < labels.length; i++) {
+        displayColors.push(getRandomColor())
+      }
+    }
     return {
       datasets: [{
-        backgroundColor: colors,
+        backgroundColor: displayColors,
         data: data,
         label: 'Transaction Data'
       }],
@@ -131,12 +128,29 @@ export default function Chart (props) {
 
   return (
     <Fragment>
-      <Polar data={displayData} />
+      {chart === 'Bar' ? (
+        <Bar data={displayData} options={{
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }} />
+      ) : null}
+      {chart === 'Pie' ? (
+        <Pie data={displayData} />
+      ) : null}
+      {chart === 'Polar' ? (
+        <Polar data={displayData} />
+      ) : null}
     </Fragment>
   )
 }
 
 Chart.propTypes = {
+  chart: PropTypes.string.isRequired,
   filter: PropTypes.string.isRequired,
   users: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,

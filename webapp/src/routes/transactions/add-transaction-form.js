@@ -23,7 +23,7 @@ export default function AddTransactionForm (props) {
     merchant_id: '',
     cost: '',
     tax: '',
-    date: new Date(),
+    date: new Date().toISOString().slice(0, 10),
     type: '',
     description: ''
   })

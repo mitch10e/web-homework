@@ -17,9 +17,14 @@ export function Charts () {
   const [users, setUsers] = React.useState([])
 
   const [filter, setFilter] = React.useState('Date')
+  const [chart, setChart] = React.useState('Bar')
 
   const handleChange = name => event => {
     setFilter(event.target.value)
+  }
+
+  const handleChart = name => event => {
+    setChart(event.target.value)
   }
 
   const handleDataLoaded = (data) => {
@@ -81,8 +86,27 @@ export function Charts () {
                       </MenuItem>
                     ))}
                   </TextField>
+                  <TextField
+                    css={{
+                      width: 250,
+                      marginLeft: 16
+                    }}
+                    id='outlined-select-chart'
+                    label='Chart Type'
+                    margin='normal'
+                    onChange={handleChart('chart')}
+                    select
+                    value={chart}
+                    variant='outlined'
+                  >
+                    {['Bar', 'Pie', 'Polar'].map(c => (
+                      <MenuItem key={c} value={c}>
+                        {c}
+                      </MenuItem>
+                    ))}
+                  </TextField>
                 </Toolbar>
-                <Chart filter={filter} merchants={merchants} transactions={transactions} users={users} />
+                <Chart chart={chart} filter={filter} merchants={merchants} transactions={transactions} users={users} />
               </Paper>
             </Fragment>
           )

@@ -204,7 +204,7 @@ export default function TransactionsTable (props) {
                   <TableCell align='right'>${transaction.cost.toFixed(2)}</TableCell>
                   <TableCell align='right'>${transaction.tax.toFixed(2)}</TableCell>
                   <TableCell align='right'>${(transaction.cost + transaction.tax).toFixed(2)}</TableCell>
-                  <TableCell>{(new Date(transaction.date)).toUTCString()}</TableCell>
+                  <TableCell>{(new Date(transaction.date)).toISOString().slice(0, 10)}</TableCell>
                   <TableCell>{transaction.credit ? 'Credit' : 'Debit'}</TableCell>
                 </TableRow>
               )
