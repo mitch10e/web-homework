@@ -111,6 +111,7 @@ export default function TableToolbar (props) {
           <Tooltip title={t('add') + ' ' + dataType}>
             <IconButton
               aria-label='add'
+              data-testid='add-user-button'
               onClick={handleClickOpenAdd}
             >
               <AddIcon />
@@ -124,7 +125,7 @@ export default function TableToolbar (props) {
         onClose={handleCloseAdd}
         open={openAdd}
       >
-        <DialogTitle id='form-dialog-add-title'>{t('addNew')} {dataType}</DialogTitle>
+        <DialogTitle data-testid='add-item-dialog' id='form-dialog-add-title'>{t('addNew')} {dataType}</DialogTitle>
         <DialogContent>
           {dataType === 'User' ? <AddUserForm handleCloseAdd={handleCloseAdd} /> : null}
           {dataType === 'Merchant' ? <AddMerchantForm handleCloseAdd={handleCloseAdd} /> : null}

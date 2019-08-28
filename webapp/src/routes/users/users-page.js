@@ -3,7 +3,7 @@ import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import UsersTable from './users-table'
 
-export function Users () {
+export default function Users () {
   const [users, setUsers] = React.useState([])
 
   const handleUsersLoaded = (data) => {
