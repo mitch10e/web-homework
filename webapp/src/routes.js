@@ -2,7 +2,6 @@ import React from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 // Fragments / Components
-import { Home } from './routes/home'
 import { Transactions } from './routes/transactions'
 import { Users } from './routes/users'
 import { Merchants } from './routes/merchants'
@@ -33,7 +32,7 @@ function AppRouter () {
       <NavDrawer />
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Route component={Home} exact path='/' />
+        <Route component={Charts} exact path='/' />
         <Route component={Transactions} exact path='/transactions' />
         <Route component={Users} exact path='/users' />
         <Route component={Merchants} exact path='/merchants' />

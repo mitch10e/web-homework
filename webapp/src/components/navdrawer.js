@@ -12,7 +12,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 
 // Icons
-import HomeIcon from '@material-ui/icons/Home'
 import PieChartIcon from '@material-ui/icons/PieChart'
 import CreditCardIcon from '@material-ui/icons/CreditCard'
 import PersonIcon from '@material-ui/icons/Person'
@@ -43,12 +42,6 @@ export default function NavDrawer () {
       <Drawer className={classes.drawer} classes={{ paper: classes.drawerPaper }} variant='permanent'>
         <div className={classes.toolbar} />
         <List>
-          <ListItem button component={RouterLink} key='Home' to='/'>
-            <ListItemIcon>
-              <HomeIcon />
-            </ListItemIcon>
-            <ListItemText primary='Home' />
-          </ListItem>
           <ListItem button component={RouterLink} key='Charts' to='/charts'>
             <ListItemIcon>
               <PieChartIcon />
